@@ -70,10 +70,7 @@ public abstract class TSModel implements GridSearcher.Gridsearchable{
         else if(model.equalsIgnoreCase("MESVD")){
             return new ME(GridSearcher.reformat(in));
         }
-        else if(model.equalsIgnoreCase("mf")){
-            return new MF(GridSearcher.reformat(in));
-
-        }
+       
         else if(model.equalsIgnoreCase("NBEATS")){
             return new N_BEATS(GridSearcher.reformat(in));
 
