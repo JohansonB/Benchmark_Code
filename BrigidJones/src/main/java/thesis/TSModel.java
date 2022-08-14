@@ -55,7 +55,7 @@ public abstract class TSModel implements GridSearcher.Gridsearchable{
             return new ARIMA_Online(GridSearcher.reformat(in));
         }
         else if(model.equalsIgnoreCase("beatlex")){
-            return new Beatlex(GridSearcher.reformat(in));
+            return new BeatlexAlt(GridSearcher.reformat(in));
         }
         else if(model.equalsIgnoreCase("BlockRNN")){
             return new BlockRNN(GridSearcher.reformat(in));
