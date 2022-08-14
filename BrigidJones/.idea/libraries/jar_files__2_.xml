@@ -1,0 +1,95 @@
+<component name="libraryTable">
+  <library name="jar_files (2)">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/Desktop/Baechlor_Sourceroni_code/Libs/jython-installer-2.7.2.jar!/" />
+      <root url="file://$USER_HOME$/Desktop/Baechlor_Sourceroni_code/Libs/jar_files (2)" />
+      <root url="file://$USER_HOME$/Desktop/Baechlor_Sourceroni_code/Libs/jar_files (3)" />
+      <root url="file://$USER_HOME$/Desktop/Baechlor_Sourceroni_code/Libs/jar_files (4)" />
+      <root url="file://$USER_HOME$/Desktop/Baechlor_Sourceroni_code/Libs/jar_files (5)" />
+      <root url="file://$USER_HOME$/Desktop" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="file://$USER_HOME$/Desktop/Java_Libaries/java_plotter_1.1_build14/doc" />
+      <root url="jar://$USER_HOME$/Desktop/Baechlor_Sourceroni_code/Libs/jython-installer-2.7.2.jar!/Doc/javadoc" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="file://$USER_HOME$/Desktop/Baechlor_Sourceroni_code/Latent_Space_Embedding/Temporal-Network-Embedding-release/Temporal-Network-Embedding-release/source_code/document2vector/src" />
+      <root url="file://$USER_HOME$/Desktop/Bernhard_Jonathan_SpaceInvaders/Bernhard_Jonathan_SpaceInvaders" />
+      <root url="file://$USER_HOME$/Desktop/JFreeChart/jfreechart-1.0.19/jfreechart-1.0.19/experimental" />
+      <root url="file://$USER_HOME$/Desktop/JFreeChart/jfreechart-1.0.19/jfreechart-1.0.19/source" />
+      <root url="file://$USER_HOME$/Desktop/JFreeChart/jfreechart-1.0.19/jfreechart-1.0.19/swt" />
+      <root url="file://$USER_HOME$/Desktop/JFreeChart/jfreechart-1.0.19/jfreechart-1.0.19/tests" />
+      <root url="file://$USER_HOME$/Desktop/Java_Libaries/java_plotter_1.1_build14/src" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/android/core/src/androidTest/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/android/core/src/main/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/api/src/main/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/api/src/test/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/basicdataset/src/main/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/basicdataset/src/test/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/djl-zero/src/main/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/djl-zero/src/test/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/dlr/dlr-engine/src/main/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/dlr/dlr-engine/src/test/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/docs/development" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/examples/.mvn/wrapper" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/examples/src/main/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/examples/src/test/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/extensions/aws-ai/src/main/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/extensions/aws-ai/src/test/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/extensions/benchmark/src/main/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/extensions/benchmark/src/test/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/extensions/fasttext/src/main/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/extensions/fasttext/src/test/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/extensions/hadoop/src/main/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/extensions/hadoop/src/test/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/extensions/sentencepiece/src/main/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/extensions/sentencepiece/src/test/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/gradle/wrapper" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/integration/src/main/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/integration/src/test/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/integration/src/test/translator" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/ml/xgboost/src/main/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/ml/xgboost/src/test/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/model-zoo/src/main/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/mxnet/jnarator/src/main/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/mxnet/mxnet-engine/src/main/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/mxnet/mxnet-engine/src/test/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/mxnet/mxnet-model-zoo/src/main/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/mxnet/mxnet-model-zoo/src/test/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/onnxruntime/onnxruntime-engine/src/main/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/onnxruntime/onnxruntime-engine/src/test/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/paddlepaddle/paddlepaddle-engine/src/main/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/paddlepaddle/paddlepaddle-engine/src/test/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/paddlepaddle/paddlepaddle-model-zoo/src/main/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/paddlepaddle/paddlepaddle-model-zoo/src/test/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/pytorch/pytorch-engine/src/main/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/pytorch/pytorch-engine/src/test/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/pytorch/pytorch-model-zoo/src/main/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/pytorch/pytorch-native/src/main/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/serving/central/src/main/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/serving/serving-plugins/plugin-managment-plugin/src/main/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/serving/serving-plugins/static-file-plugin/src/main/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/serving/serving/docker/serving/gradle/wrapper" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/serving/serving/src/main/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/serving/serving/src/test/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/tensorflow/tensorflow-engine/src/main/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/tensorflow/tensorflow-engine/src/test/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/tensorflow/tensorflow-model-zoo/src/main/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/tensorflow/tensorflow-model-zoo/src/test/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/testing/src/main/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/tflite/tflite-engine/src/main/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/tflite/tflite-engine/src/test/java" />
+      <root url="file://$USER_HOME$/Desktop/djl-master/djl-master/tflite/tflite-native/src/main/java" />
+      <root url="file://$USER_HOME$/Desktop/memorable mention/BeatlexTry/Cleaner_but_Minor_diffrent_result" />
+      <root url="jar://$USER_HOME$/Desktop/Baechlor_Sourceroni_code/Libs/jython-installer-2.7.2.jar!/Demo/embed" />
+      <root url="jar://$USER_HOME$/Desktop/Baechlor_Sourceroni_code/Libs/jython-installer-2.7.2.jar!/Demo/jreload/src" />
+      <root url="jar://$USER_HOME$/Desktop/Baechlor_Sourceroni_code/Libs/jython-installer-2.7.2.jar!/src" />
+      <root url="jar://$USER_HOME$/Desktop/Baechlor_Sourceroni_code/Libs/jython-installer-2.7.2.jar!/tests/java" />
+    </SOURCES>
+    <jarDirectory url="file://$USER_HOME$/Desktop" recursive="false" />
+    <jarDirectory url="file://$USER_HOME$/Desktop/Baechlor_Sourceroni_code/Libs/jar_files (2)" recursive="false" />
+    <jarDirectory url="file://$USER_HOME$/Desktop/Baechlor_Sourceroni_code/Libs/jar_files (3)" recursive="false" />
+    <jarDirectory url="file://$USER_HOME$/Desktop/Baechlor_Sourceroni_code/Libs/jar_files (4)" recursive="false" />
+    <jarDirectory url="file://$USER_HOME$/Desktop/Baechlor_Sourceroni_code/Libs/jar_files (5)" recursive="false" />
+  </library>
+</component>

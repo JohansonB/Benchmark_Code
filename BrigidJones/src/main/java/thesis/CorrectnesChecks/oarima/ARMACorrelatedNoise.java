@@ -1,0 +1,111 @@
+package thesis.CorrectnesChecks.oarima;
+
+import org.apache.commons.math3.linear.MatrixUtils;
+import org.apache.commons.math3.linear.RealVector;
+import thesis.DataGenerators.ARMA;
+import thesis.Models.ARIMA_Online;
+import thesis.Tools.ArrayUtils;
+import thesis.Tools.GridSearcher;
+import thesis.Tools.TimeSeries;
+import thesis.Tools.Tuple;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Random;
+
+public class ARMACorrelatedNoise{
+    //works
+    public static void main(String[] args) throws IOException {
+        Tuple<double[],double[]> out =  create_Series();
+        new TimeSeries(out.getVal1()).writeToCSV("Datasets\\ARMAtest4.csv");
+
+        HashMap<String,String> h =new HashMap<>();
+        h.put("-opt","ONS");
+        h.put("-epsilon","0.1");
+        h.put("-lrate","1");
+        HashMap<String,String> h2 =new HashMap<>();
+        h2.put("-opt","OGD");
+        h2.put("-lrate","0.05");
+        RealVector aveA = null;
+        RealVector aveB = null;
+        RealVector aveC = null;
+        for(int i = 0; i<10;i++) {
+            System.out.println(i);
+            ARIMA_Online a = new ARIMA_Online(GridSearcher.reformat(h));
+            a.test_accuracy("Datasets\\ARMAtest4.csv", 0.98);
+            //System.out.println(m.getW());
+            ARIMA_Online b = new ARIMA_Online(GridSearcher.reformat(h2));
+            b.test_accuracy("Datasets\\ARMAtest4.csv", 0.98);
+            //System.out.println(b.getW());
+            if(aveA == null)
+                aveA = a.getRMSE();
+            else
+                aveA = aveA.mapMultiply(i+1).add(a.getRMSE()).mapDivide(i+2);
+            if(aveB == null)
+                aveB = b.getRMSE();
+            else
+                aveB = aveB.mapMultiply(i+1).add(b.getRMSE()).mapDivide(i+2);
+            if(aveC==null)
+                aveC = getRMSE(out);
+            else
+                aveC = aveC.mapMultiply(i+1).add(getRMSE(out)).mapDivide(i+2);
+        }
+        new TimeSeries(aveA).plot("ONS");
+        System.out.println(aveB);
+        new TimeSeries(aveB).plot("OGD");
+        new TimeSeries(aveC).plot("perfect");
+    }
+
+    private static Tuple<double[],double[]> create_Series(){
+        int p = 2;
+        int q = 4;
+        int timeSteps = 10000;
+        double[] maLags = new double[]{0.41,-0.39,-0.685,0.1};
+        double[] arLags= new double[]{0.11,-0.5};
+
+        double[] startingArray = new double[]{0,0,0,0};
+        int maxLags = Math.max(p,q);
+        double[] outputArray = new double[timeSteps+maxLags];
+        System.arraycopy(startingArray,startingArray.length-maxLags,outputArray,0,maxLags);
+        double[] errorArray = normal(0.3,timeSteps+maxLags);
+        double[] meanArray = new double[timeSteps+maxLags];
+        for(int i = maxLags; i<outputArray.length;i++){
+            double value = 0;
+            for(int j = 1; j<=p;j++){
+                value+= outputArray[i-j]*arLags[p-j];
+            }
+            for(int k = 1; k<=q;k++){
+                value+= errorArray[i-k]*maLags[q-k];
+            }
+            outputArray[i] = value+errorArray[i];
+            meanArray[i] = value;
+        }
+        return new Tuple(ArrayUtils.startAt(outputArray,maxLags),ArrayUtils.startAt(meanArray,maxLags));
+
+
+
+    }
+
+    private static double[] normal(double SD, int len) {
+        double[] ret = new double[len];
+        Random r = new Random();
+        double mean = 0;
+        for(int i = 0; i<len;i++){
+            ret[i] = r.nextGaussian()*SD+mean;
+            mean = ret[i];
+        }
+        return ret;
+    }
+
+    private static RealVector getRMSE(Tuple<double[],double[]> out) {
+        RealVector a = MatrixUtils.createRealVector(out.getVal1());
+        RealVector b = MatrixUtils.createRealVector(out.getVal2());
+        RealVector RMSE = MatrixUtils.createRealVector(new double[a.getDimension()]);
+        double SE = 0;
+        for(int i = 0; i<a.getDimension();i++){
+            SE += Math.pow(a.getEntry(i)-b.getEntry(i),2);
+            RMSE.setEntry(i,Math.sqrt(SE/(i+1)));
+        }
+        return RMSE;
+    }
+}
