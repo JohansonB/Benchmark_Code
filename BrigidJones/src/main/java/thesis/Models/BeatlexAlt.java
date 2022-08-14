@@ -338,6 +338,10 @@ private int allign(RealMatrix vocab, RealMatrix segment){
         max_dist = in.containsKey("-maxdist") ? new Double(in.get("-maxdist").get(0)).intValue() : defaultMaxDist;
 
     }
+    
+     public String toString(){
+        return "beatlex";
+    }
 
     @Override
     protected Output evaluate() {
