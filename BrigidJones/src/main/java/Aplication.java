@@ -1,8 +1,8 @@
-import com.sun.xml.internal.bind.api.impl.NameConverter;
+
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.stat.descriptive.moment.Mean;
-import thesis.Models.*;
+
 import thesis.TSModel;
 import thesis.Tools.Graph;
 import thesis.Tools.TimeSeries;
@@ -13,7 +13,9 @@ import java.io.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -366,7 +368,7 @@ public class Aplication {
                         continue;
                     }
 
-                        //create instance of target object
+                    //create instance of target object
                     Class<? extends TSModel> clazz = (Class<? extends TSModel>) Class.forName(method_str);
                     Constructor<? extends TSModel> ctor = clazz.getConstructor(HashMap.class);
                     TSModel model = ctor.newInstance(reformat(params));
@@ -457,7 +459,7 @@ public class Aplication {
         for(String s : split){
             String[] splitsplit = s.split("=");
             returner.put(splitsplit[0],splitsplit[1]);
-         }
+        }
         return returner;
     }
     private HashMap<String,HashMap<String,HashMap<String,String>>> decode_hyperparams(String encoding){
@@ -725,13 +727,13 @@ public class Aplication {
                     "\twidth=\\textwidth,height=.2\\textheight]\n");
 
             g.get_ys().forEach((k,v)-> {
-                        sb.append("\\addplot[color=" + String_to_Color.get_color(k) + ",mark=x] coordinates {\n");
-                        ArrayList<Double> indxs = g.get_indexs().indexs();
-                        for (int i = 0; i < indxs.size(); i++) {
-                            sb.append("\t(" + indxs.get(i) + "," + v.get(i) + ")\n");
-                        }
-                        sb.append("};\n");
-                    });
+                sb.append("\\addplot[color=" + String_to_Color.get_color(k) + ",mark=x] coordinates {\n");
+                ArrayList<Double> indxs = g.get_indexs().indexs();
+                for (int i = 0; i < indxs.size(); i++) {
+                    sb.append("\t(" + indxs.get(i) + "," + v.get(i) + ")\n");
+                }
+                sb.append("};\n");
+            });
             //Image closing tags
             sb.append("\\end{axis}\n");
             sb.append("\\end{tikzpicture}\n");
@@ -812,8 +814,8 @@ public class Aplication {
                             non_trunc_error_graphs.put(data_name,cur_non_trunc);
                         }
                         else{
-                           trunc_error_graphs.put(data_name,trunc_error_graphs.get(data_name).merge(cur_trunc));
-                           non_trunc_error_graphs.put(data_name,non_trunc_error_graphs.get(data_name).merge(cur_non_trunc));
+                            trunc_error_graphs.put(data_name,trunc_error_graphs.get(data_name).merge(cur_trunc));
+                            non_trunc_error_graphs.put(data_name,non_trunc_error_graphs.get(data_name).merge(cur_non_trunc));
                         }
                     }));
 
@@ -898,14 +900,15 @@ public class Aplication {
                 }
             }
             aggregate.forEach((data_name,v)->v.forEach((method,res)->{
+                String method_name = method.substring(method.lastIndexOf(".")+1).replaceAll("_vary","");
                 if(!error_graphs.containsKey(data_name)){
-                    error_graphs.put(data_name,res.error_graph(m,data_name));
-                    runtime_Graphs.put(data_name,res.runtime_graph(data_name));
+                    error_graphs.put(data_name,res.error_graph(m,data_name,method_name));
+                    runtime_Graphs.put(data_name,res.runtime_graph(data_name,method_name));
 
                 }
                 else{
-                    error_graphs.put(data_name,error_graphs.get(data_name).merge(res.error_graph(m,data_name)));
-                    runtime_Graphs.put(data_name,runtime_Graphs.get(data_name).merge(res.runtime_graph(data_name)));
+                    error_graphs.put(data_name,error_graphs.get(data_name).merge(res.error_graph(m,data_name,method_name)));
+                    runtime_Graphs.put(data_name,runtime_Graphs.get(data_name).merge(res.runtime_graph(data_name,method_name)));
                 }
 
             }));
@@ -960,6 +963,117 @@ public class Aplication {
             return file_name.substring(file_name.lastIndexOf("_")+1).equalsIgnoreCase("length.txt");
         }
     }
+
+    public static class Vary_Dimension_Plotter extends Outputter{
+
+        //dataset-> errorGraph
+        HashMap<String,Graph> error_graphs = new HashMap<>();
+        //dataset -> runtimegraph
+        HashMap<String,Graph> runtime_Graphs = new HashMap<>();
+
+        //Dataset maps to method-output mapping
+        HashMap<String,HashMap<String, TSModel.Vary_Result>> aggregate = new HashMap<>();
+        TSModel.Metric m;
+
+        public Vary_Dimension_Plotter(TSModel.Metric m){
+            this.m = m;
+        }
+
+        @Override
+        protected void conclude() {
+            //remove 1D and ND tags incase of no duplicates
+            for(String key : aggregate.keySet()){
+                //add to seen when seen once and remove again when seen twice therefore only methods seen 1 time are kept
+                ArrayList<String> seen = new ArrayList<>();
+                ArrayList<String> keys = new ArrayList<>();
+                for(String method : aggregate.get(key).keySet()){
+                    String method_name = method.substring(0,method.length()-2);
+                    if(!seen.contains(method_name)) {
+                        seen.add(method_name);
+                        keys.add(method);
+                    }
+                    else {
+                        seen.remove(method_name);
+                        keys.remove(method_name+"ND");
+                        keys.remove(method_name+"1D");
+                    }
+
+                }
+                for(String name : keys){
+                    String method_name = name.substring(0,name.length()-2);
+                    aggregate.get(key).put(method_name,aggregate.get(key).get(name));
+                    aggregate.get(key).remove(name);
+
+                }
+            }
+
+            aggregate.forEach((data_name,v)->v.forEach((method,res)->{
+                String method_name = method.substring(method.lastIndexOf(".")+1);
+                TSModel.Output normal;
+                TSModel.Output tail = res.tail();
+                ArrayList<Double> errors = new ArrayList();
+                Graph g = res.error_graph(m,data_name,method_name);
+                for(int i = 0; i<res.get_results().size();i++) {
+                    //anker
+                    normal = tail.sub_copy(0, res.Output_at(i+1).getForecast().getRowDimension());
+                    double error = res.Output_at(i+1).error(m)/normal.error(m);
+                    errors.add(i,error);
+                }
+                g.get_ys().put(method_name,errors);
+                if(error_graphs.containsKey(data_name)){
+                    error_graphs.put(data_name,error_graphs.get(data_name).merge(g));
+                    runtime_Graphs.put(data_name,runtime_Graphs.get(data_name).merge(res.runtime_graph(data_name,method_name)));
+                }
+                else{
+                    error_graphs.put(data_name,g);
+                    runtime_Graphs.put(data_name,res.runtime_graph(data_name,method_name));
+                }
+
+            }));
+
+
+        }
+
+        @Override
+        protected void process_dataset(String data_set_name, ArrayList<Integer> sub_series, File f) {
+            String method_name = method_name(f);
+            if(!aggregate.containsKey(data_set_name))
+                aggregate.put(data_set_name,new HashMap<>());
+
+            aggregate.get(data_set_name).put(method_name,load_vary_result(f.getPath()).getVal2());
+
+        }
+
+        @Override
+        protected void process_subseries(String data_set_name, int index, File f) {
+            String method_name = method_name(f);
+            String s_name = subserie_name(data_set_name,index);
+            if(!aggregate.containsKey(s_name))
+                aggregate.put(s_name,new HashMap<>());
+
+
+            aggregate.get(s_name).put(method_name,load_vary_result(f.getPath()).getVal2());
+
+        }
+
+        @Override
+        protected boolean relevant(String file_name) {
+            return file_name.substring(file_name.lastIndexOf("_")+1).equalsIgnoreCase("varyDimension.txt");
+        }
+
+        public void plot_error_graphs(){
+            error_graphs.forEach((d,g)-> {
+                //g.set_log_base_y(2);
+                g.plot();
+            });
+        }
+        public void plot_runtime_graphs(){
+            runtime_Graphs.forEach((d,g)-> {
+                //g.set_log_base_y(2);
+                g.plot();
+            });
+        }
+    }
     public class Scenario_Ranker extends Outputter{
         //scenario maps to hashmap which maps methods to list of errors encountered on data sets of that scenario.
         HashMap<String,HashMap<String,ArrayList<Double>>> scens = new HashMap<>();
@@ -1008,34 +1122,34 @@ public class Aplication {
 
         }
         private void display(HashMap<String,HashMap<String,Double>> error_mapping){
-           HashMap<String,ArrayList<Tuple<String,Double>>> ranking = new HashMap<>();
+            HashMap<String,ArrayList<Tuple<String,Double>>> ranking = new HashMap<>();
 
-           error_mapping.forEach((scenario, map)->
-           {
-               ranking.put(scenario,new ArrayList<>());
-               ArrayList<Double> errors =  new ArrayList<>(map.values());
-               Collections.sort(errors);
-               ArrayList<String> exclude = new ArrayList<>();
-               Double last = null;
-               String last_name = null;
-               for(Double error : errors){
-                   if(last!= null && last.doubleValue() == error)
-                       exclude.add(last_name);
-                   else
-                       exclude = new ArrayList<>();
+            error_mapping.forEach((scenario, map)->
+            {
+                ranking.put(scenario,new ArrayList<>());
+                ArrayList<Double> errors =  new ArrayList<>(map.values());
+                Collections.sort(errors);
+                ArrayList<String> exclude = new ArrayList<>();
+                Double last = null;
+                String last_name = null;
+                for(Double error : errors){
+                    if(last!= null && last.doubleValue() == error)
+                        exclude.add(last_name);
+                    else
+                        exclude = new ArrayList<>();
 
-                   last_name = getKeyByValue(error_mapping.get(scenario),error,exclude);
-                   last = error;
+                    last_name = getKeyByValue(error_mapping.get(scenario),error,exclude);
+                    last = error;
 
-                   ranking.get(scenario).add(new Tuple<>(last_name,error));
+                    ranking.get(scenario).add(new Tuple<>(last_name,error));
 
-               }
-           });
+                }
+            });
 
-           ranking.forEach((scenario, rank)->{
-               System.out.println("*****************************"+scenario+"*****************************");
-               rank.forEach(pair -> System.out.println(pair.getVal1()+"            "+"Error: "+pair.getVal2()));
-           });
+            ranking.forEach((scenario, rank)->{
+                System.out.println("*****************************"+scenario+"*****************************");
+                rank.forEach(pair -> System.out.println(pair.getVal1()+"            "+"Error: "+pair.getVal2()));
+            });
         }
 
         @Override
@@ -1086,10 +1200,10 @@ public class Aplication {
                 if(!scens.containsKey(scenario))
                     scens.put(scenario,new HashMap<>());
 
-                    if(!scens.get(scenario).containsKey(method_name))
-                        scens.get(scenario).put(method_name,new ArrayList<>());
+                if(!scens.get(scenario).containsKey(method_name))
+                    scens.get(scenario).put(method_name,new ArrayList<>());
 
-                    scens.get(scenario).get(method_name).add(o.error(metric));
+                scens.get(scenario).get(method_name).add(o.error(metric));
 
             }
 
@@ -1162,13 +1276,22 @@ public class Aplication {
 
         //example of how to plot an individual prediction
         //v.plot_forecasts("electricity_consumption#268",new trmf(),new TBATS());
-        
-        
+
+
         //uncomment this to plot the results of the vary length experiment (time series electricity_consumption#245: blackout series
         //excluded from analysis due to anomaly in test set)
         /*Vary_Length_Plotter v = new Vary_Length_Plotter(new TSModel.RMSE());
         v.run();
         //plotting all the error graphs
+        v.plot_error_graphs();*/
+
+        //uncomment this to plot the results of the vary dimension experiment
+        //plots all data sets using the same metric. In the evaluation I used the RMSE metric for the solar energy data set
+        //since the data set has many close to zero entries which skewes the SMAPE making it not well suited.
+        /*Vary_Dimension_Plotter v = new Vary_Dimension_Plotter(new TSModel.SMAPE());
+        //replace with this line to plot with RMSE as metric
+        //Vary_Dimension_Plotter v = new Vary_Dimension_Plotter(new TSModel.RMSE());
+        v.run();
         v.plot_error_graphs();*/
 
         app.save();
@@ -1177,6 +1300,37 @@ public class Aplication {
 
 
 
+    }
+    private void reformat(String origin, String target, TSModel method) throws IOException {
+        if(origin.replaceAll(".txt","").charAt(origin.replaceAll(".txt","").length()-1)!='d'){
+            throw new Error("wrong file you goof");
+        }
+        String method_name = method.getClass().getName();
+        String dest_path = "Outputs\\"+target+"//"+method_name+"_varyDimension.txt";
+        Path p =  new File(dest_path).toPath();
+        Files.copy(new File(origin).toPath(),p, StandardCopyOption.REPLACE_EXISTING);
+        try(FileWriter fw = new FileWriter(dest_path, true);
+            BufferedWriter bw = new BufferedWriter(fw))
+        {
+            //more code
+            bw.write("##########");
+            HashMap<String,String> params = new HashMap<>();
+            //if time series is a subseries store the name of the parent here. data sets are their own parents
+
+            if(hyper_params.containsKey(method_name)){
+                HashMap<String,HashMap<String,String>> cur = hyper_params.get(method_name);
+                //first add global settings
+                if(cur.containsKey("ALL"))
+                    params.putAll(cur.get("ALL"));
+                if(cur.containsKey(target))
+                    params.putAll(cur.get(target));
+            }
+            bw.write(params.toString());
+
+            //more code
+        } catch (IOException e) {
+            //exception handling left as an exercise for the reader
+        }
     }
     public static void scale_comparison(){
         int[] subseries = {109,110};
@@ -1233,12 +1387,14 @@ public class Aplication {
         }
         @Override
         String file_ending() {
-            return "_vary_dimension.txt";
+            return "_varyDimension.txt";
         }
         public HashMap<String,String> load_params(String output_path) throws IOException {
             return load_vary_result(output_path).getVal1();
         }
     }
+
+
 
     public static class Vary_Length extends Test{
         @Override
