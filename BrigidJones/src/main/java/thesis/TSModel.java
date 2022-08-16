@@ -5,10 +5,6 @@ import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.RealVector;
 import org.apache.commons.math3.stat.descriptive.moment.Mean;
 import org.apache.commons.math3.stat.descriptive.moment.Variance;
-import org.bytedeco.opencv.presets.opencv_core;
-import org.nd4j.linalg.api.ops.impl.shape.Rank;
-import org.nd4j.shade.errorprone.annotations.Var;
-import thesis.DataGenerators.ARMA;
 import thesis.Models.*;
 import thesis.Tools.*;
 
@@ -70,7 +66,6 @@ public abstract class TSModel implements GridSearcher.Gridsearchable{
         else if(model.equalsIgnoreCase("MESVD")){
             return new ME(GridSearcher.reformat(in));
         }
-       
         else if(model.equalsIgnoreCase("NBEATS")){
             return new N_BEATS(GridSearcher.reformat(in));
 
@@ -1311,6 +1306,24 @@ public abstract class TSModel implements GridSearcher.Gridsearchable{
 
             return g;
         }
+        public Graph runtime_graph(String data_name,String method){
+            Graph g = new Graph();
+            g.dots(true);
+            g.set_value_string("Runtime in seconds");
+            g.set_titel("Runtime plot");
+            g.set_data_set(data_name);
+            //g.set_log_scale_y(true);
+            g.set_log_base_y(10);
+            g.set_indexs(new IndexSet(mode.description()));
+            ArrayList<Double> keys = new ArrayList<>();
+            keys.addAll(experiment_outputs.keySet());
+            Collections.sort(keys);
+            keys.forEach(v -> {
+                g.add(method,v,experiment_outputs.get(v).getRunTime());
+            });
+
+            return g;
+        }
         public Graph error_graph(Metric m){
             Graph g = new Graph();
             g.dots(true);
@@ -1345,6 +1358,23 @@ public abstract class TSModel implements GridSearcher.Gridsearchable{
 
             return g;
         }
+        public Graph error_graph(Metric m,String data_name, String method){
+            Graph g = new Graph();
+            g.dots(true);
+            g.set_titel("Error Graph");
+            g.set_value_string(m.getDescription());
+            g.set_data_set(data_name);
+            g.set_indexs(new IndexSet(mode==Mode.VARY_DIMENSION ? "number dimensions" : "number data points"));
+            //experiment_outputs.forEach((k,v)->g.add(v.getModel(),mode.step_size(v,k),v.error(m)));
+            ArrayList<Double> keys = new ArrayList<>();
+            keys.addAll(experiment_outputs.keySet());
+            Collections.sort(keys);
+            keys.forEach(v -> {
+                g.add(method,v,experiment_outputs.get(v).error(m));
+            });
+
+            return g;
+        }
         public void plot_at(int rank,int cap){
             List<Double> temp = new ArrayList<>(experiment_outputs.keySet());
             Collections.sort(temp);
@@ -1361,6 +1391,12 @@ public abstract class TSModel implements GridSearcher.Gridsearchable{
             List<Double> temp = new ArrayList<>(experiment_outputs.keySet());
             Collections.sort(temp);
             experiment_outputs.get(temp.get(rank-1)).plotComparrison();
+
+        }
+        public void plot_at(int rank, String mehtod, String data_name){
+            List<Double> temp = new ArrayList<>(experiment_outputs.keySet());
+            Collections.sort(temp);
+            experiment_outputs.get(temp.get(rank-1)).plotComparrison(mehtod,data_name);
 
         }
         public void plot_at(double key){
