@@ -47,9 +47,6 @@ public abstract class TSModel implements GridSearcher.Gridsearchable{
         if(model.equalsIgnoreCase("AutoARIMA")){
             return new ARIMA(GridSearcher.reformat(in));
         }
-        else if(model.equalsIgnoreCase("oarima OGD")){
-            return new ARIMA_Online(GridSearcher.reformat(in));
-        }
         else if(model.equalsIgnoreCase("beatlex")){
             return new BeatlexAlt(GridSearcher.reformat(in));
         }
