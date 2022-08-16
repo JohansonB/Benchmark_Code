@@ -1162,6 +1162,14 @@ public class Aplication {
 
         //example of how to plot an individual prediction
         //v.plot_forecasts("electricity_consumption#268",new trmf(),new TBATS());
+        
+        
+        //uncomment this to plot the results of the vary length experiment (time series electricity_consumption#245: blackout series
+        //excluded from analysis due to anomaly in test set)
+        /*Vary_Length_Plotter v = new Vary_Length_Plotter(new TSModel.RMSE());
+        v.run();
+        //plotting all the error graphs
+        v.plot_error_graphs();*/
 
         app.save();
 
