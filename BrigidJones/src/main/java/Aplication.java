@@ -981,31 +981,7 @@ public class Aplication {
 
         @Override
         protected void conclude() {
-            //remove 1D and ND tags incase of no duplicates
-            for(String key : aggregate.keySet()){
-                //add to seen when seen once and remove again when seen twice therefore only methods seen 1 time are kept
-                ArrayList<String> seen = new ArrayList<>();
-                ArrayList<String> keys = new ArrayList<>();
-                for(String method : aggregate.get(key).keySet()){
-                    String method_name = method.substring(0,method.length()-2);
-                    if(!seen.contains(method_name)) {
-                        seen.add(method_name);
-                        keys.add(method);
-                    }
-                    else {
-                        seen.remove(method_name);
-                        keys.remove(method_name+"ND");
-                        keys.remove(method_name+"1D");
-                    }
 
-                }
-                for(String name : keys){
-                    String method_name = name.substring(0,name.length()-2);
-                    aggregate.get(key).put(method_name,aggregate.get(key).get(name));
-                    aggregate.get(key).remove(name);
-
-                }
-            }
 
             aggregate.forEach((data_name,v)->v.forEach((method,res)->{
                 String method_name = method.substring(method.lastIndexOf(".")+1);
@@ -1269,6 +1245,7 @@ public class Aplication {
     public static void main(String[] args) throws IOException {
         Aplication app = Aplication.getInstance();
 
+        //plot results of the Vary_Horizon experiment
         Vary_Horizon v = new Vary_Horizon(new TSModel.RMSE());
         v.run();
         //plotting all the error graphs
@@ -1280,7 +1257,7 @@ public class Aplication {
 
         //uncomment this to plot the results of the vary length experiment (time series electricity_consumption#245: blackout series
         //excluded from analysis due to anomaly in test set)
-        /*Vary_Length_Plotter v = new Vary_Length_Plotter(new TSModel.RMSE());
+       /* Vary_Length_Plotter v = new Vary_Length_Plotter(new TSModel.RMSE());
         v.run();
         //plotting all the error graphs
         v.plot_error_graphs();*/
